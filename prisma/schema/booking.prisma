@@ -1,7 +1,5 @@
 model Booking{
     id String @id @default(uuid())
-    carId String
-    car Car @relation(fields: [carId], references: [id])
     renterId String
     renter User @relation(fields: [renterId], references: [id])
 
