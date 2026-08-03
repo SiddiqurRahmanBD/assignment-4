@@ -9,8 +9,9 @@ model User {
     updatedAt DateTime @updatedAt
     
     technicianProfiles technicianProfile?
-
     bookings Booking[]
+    reviews Review[]
 
     @@map("users")
+    
 }

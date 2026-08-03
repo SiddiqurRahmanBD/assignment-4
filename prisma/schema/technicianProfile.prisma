@@ -13,8 +13,11 @@ model technicianProfile {
 
     services Service[]
 
-   
     bookings Booking[]
 
-     @@map("technician_profiles")
+    reviews Review[]
+
+    @@map("technician_profiles")
+    
+    availabilities Availability[]
 }
