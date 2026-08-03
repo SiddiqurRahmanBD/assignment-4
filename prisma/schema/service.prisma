@@ -10,4 +10,8 @@ model Service {
     technicianProfile technicianProfile @relation(fields: [technicianProfileId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    bookings Booking[]
+
+    @@map("services")
 }

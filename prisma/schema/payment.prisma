@@ -1,16 +1,19 @@
 model Payment {
     id String @id @default (uuid())
     bookingId String
-    booking Booking @relation(fields: [bookingId], references: [id])
-    transactionId String @unique
+    booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
     amount Float
+    transactionId String @unique
     status PaymentStatus @default(PENDING)
-    paidat DateTime @default(now())
+    provider PaymentProvider
+
+    paidAt DateTime @default(now()) 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    
+
+
+    @@map("payments")
    
 }
 
-enum PaymentStatus {
-    PENDING
-    COMPLETED
-    FAILED
-}

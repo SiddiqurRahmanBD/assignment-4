@@ -1,22 +1,17 @@
 model Booking{
     id String @id @default(uuid())
-    renterId String
-    renter User @relation(fields: [renterId], references: [id])
-
-    startDate DateTime
-    endDate DateTime 
-    totalPrice Float
-
-    bookingStatus BookingStatus @default(PENDING)
+    customerId String
+    customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
+    technicianProfileId String
+    technician technicianProfile @relation(fields: [technicianProfileId], references: [id], onDelete: Cascade)
+    serviceId String
+    service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+    status BookingStatus @default(REQUESTED)
+    scheduledAt DateTime
     createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-    //payment
-
+    @@map("bookings")
     payments Payment[]
 }
 
-enum BookingStatus {
-    PENDING
-    CONFIRMED
-    CANCELLED
-}

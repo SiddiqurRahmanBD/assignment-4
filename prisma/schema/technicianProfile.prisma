@@ -4,12 +4,17 @@ model technicianProfile {
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     skill String
-    bio String
-    experience Int
+    bio String @db.Text
+    experience Int @default(0)
     pricing Float
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     services Service[]
+
+   
+    bookings Booking[]
+
+     @@map("technician_profiles")
 }
