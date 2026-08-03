@@ -4,11 +4,10 @@ model User {
     email String @unique
     password String
     role Role @default(CUSTOMER)
-    isBanned Boolean @default(false)
+    status UserStatus @default(ACTIVE)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
    
-
 
     bookings Booking[]
 }
