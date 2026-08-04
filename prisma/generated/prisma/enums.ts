@@ -9,9 +9,30 @@
 * 🟢 You can import this file directly.
 */
 
+export const Role = {
+  CUSTOMER: 'CUSTOMER',
+  TECHNICIAN: 'TECHNICIAN',
+  ADMIN: 'ADMIN'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
 export const BookingStatus = {
-  PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
+  REQUESTED: 'REQUESTED',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  PAID: 'PAID',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 } as const
 
@@ -27,10 +48,9 @@ export const PaymentStatus = {
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
-export const Role = {
-  OWNER: 'OWNER',
-  ADMIN: 'ADMIN',
-  RENTER: 'RENTER'
+export const PaymentProvider = {
+  STRIPE: 'STRIPE',
+  SSLCOMMERZ: 'SSLCOMMERZ'
 } as const
 
-export type Role = (typeof Role)[keyof typeof Role]
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider]

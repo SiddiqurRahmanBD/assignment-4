@@ -11,10 +11,10 @@ model Booking{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     payments Payment?
-
+    reviews Review[]
 
     @@map("bookings")
    
-    reviews Review[]
+    
 }
 

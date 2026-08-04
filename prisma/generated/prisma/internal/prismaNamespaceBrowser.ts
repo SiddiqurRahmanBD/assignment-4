@@ -51,9 +51,13 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Availability: 'Availability',
   Booking: 'Booking',
-  Car: 'Car',
+  Category: 'Category',
   Payment: 'Payment',
+  Review: 'Review',
+  Service: 'Service',
+  technicianProfile: 'technicianProfile',
   User: 'User'
 } as const
 
@@ -73,43 +77,100 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const AvailabilityScalarFieldEnum = {
+  id: 'id',
+  technicianProfileId: 'technicianProfileId',
+  dayOfWeek: 'dayOfWeek',
+  isAvailable: 'isAvailable',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AvailabilityScalarFieldEnum = (typeof AvailabilityScalarFieldEnum)[keyof typeof AvailabilityScalarFieldEnum]
+
+
 export const BookingScalarFieldEnum = {
   id: 'id',
-  carId: 'carId',
-  renterId: 'renterId',
-  startDate: 'startDate',
-  endDate: 'endDate',
-  totalPrice: 'totalPrice',
-  bookingStatus: 'bookingStatus',
-  createdAt: 'createdAt'
+  customerId: 'customerId',
+  technicianProfileId: 'technicianProfileId',
+  serviceId: 'serviceId',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
-export const CarScalarFieldEnum = {
+export const CategoryScalarFieldEnum = {
   id: 'id',
-  brand: 'brand',
-  model: 'model',
-  location: 'location',
-  ownerId: 'ownerId',
-  dailyRate: 'dailyRate',
-  CreatedAt: 'CreatedAt'
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type CarScalarFieldEnum = (typeof CarScalarFieldEnum)[keyof typeof CarScalarFieldEnum]
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
 export const PaymentScalarFieldEnum = {
   id: 'id',
   bookingId: 'bookingId',
-  transactionId: 'transactionId',
   amount: 'amount',
+  transactionId: 'transactionId',
   status: 'status',
-  paidat: 'paidat'
+  provider: 'provider',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  customerId: 'customerId',
+  technicianProfileId: 'technicianProfileId',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const ServiceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  price: 'price',
+  categoryId: 'categoryId',
+  technicianProfileId: 'technicianProfileId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
+
+
+export const TechnicianProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  skills: 'skills',
+  experience: 'experience',
+  pricing: 'pricing',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TechnicianProfileScalarFieldEnum = (typeof TechnicianProfileScalarFieldEnum)[keyof typeof TechnicianProfileScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {
@@ -117,7 +178,10 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  role: 'role'
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -137,4 +201,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
