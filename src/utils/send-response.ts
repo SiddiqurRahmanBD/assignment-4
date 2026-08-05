@@ -1,12 +1,25 @@
-import type { Response } from "express";
+import type{ Response } from "express";
 
-export function sendResponse<T>(
-  res: Response,
-  { message, data, error }: { message: unknown; data?: T; error?: boolean },
-  status = 200,
-) {
-  res.status(status).json({
-    message: message,
-    data: error ? undefined : data,
+type TMeta = {
+  page: number;
+  limit: number;
+  total: number;
+};
+
+type TResponseData<T> = {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: T;
+  meta?: TMeta;
+};
+
+export const sendResponse = <T>(res: Response, data: TResponseData<T>) => {
+  res.status(data.statusCode).json({
+    success: data.success,
+    statusCode: data.statusCode,
+    message: data.message,
+    data: data.data,
+    meta: data.meta,
   });
-}
+};
