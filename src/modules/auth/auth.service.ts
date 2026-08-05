@@ -57,7 +57,6 @@ export async function loginUser(payload: LoginUserPayload) {
     id: user.id,
     name: user.name,
     email: user.email,
-    password: user.password,
     role: user.role,
     status: user.status,
     createdAt: user.createdAt,
