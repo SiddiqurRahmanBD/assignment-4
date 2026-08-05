@@ -68,3 +68,20 @@ export async function loginUser(payload: LoginUserPayload) {
     ...createTokenPair({ id: user.id, email: user.email, role: user.role }),
   };
 }
+
+export async function getmeUser(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+  });
+  if (!user) {
+    throw new AppError(401, "User not found");
+  }
+  return user;
+}

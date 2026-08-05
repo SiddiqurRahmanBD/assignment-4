@@ -2,8 +2,7 @@ import { catchAsync } from "../../utils/catch-async";
 import type { Request, Response, NextFunction } from "express";
 import { sendResponse } from "../../utils/send-response";
 import httpStatus from "http-status";
-import { loginUser, registerUser } from "./auth.service";
-import { request } from "http";
+import { getmeUser, loginUser, registerUser } from "./auth.service";
 
 export const register = catchAsync(async (req: Request, res: Response) => {
   const result = await registerUser(req.body);
@@ -22,6 +21,17 @@ export const login = catchAsync(async (req: Request, res: Response) => {
     success: true,
     statusCode: httpStatus.OK,
     message: "User Login Successfully",
+    data: result,
+  });
+});
+
+export const getme = catchAsync(async (req: Request, res: Response) => {
+  const userId = (req as any).user!.id;
+  const result = await getmeUser(userId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User profile retrieved successfully",
     data: result,
   });
 });
