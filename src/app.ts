@@ -13,7 +13,7 @@ app.get("/", (_req, res) => {
   res.send("Server is running");
 });
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 // app.use("/users", usersRouter);
 
 
