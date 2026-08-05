@@ -3,6 +3,8 @@ import cookieParser from "cookie-parser";
 import { notFoundHandler } from "./middleware/not-found";
 import { globalErrorHandler } from "./middleware/global-error";
 import authRouter from "./modules/auth/auth.routes";
+import adminRouter from "./modules/admin/admin.routes";
+
 
 const app: Application = express();
 
@@ -14,7 +16,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-// app.use("/users", usersRouter);
+app.use("/api/admin", adminRouter)
 
 
 app.use(notFoundHandler);
