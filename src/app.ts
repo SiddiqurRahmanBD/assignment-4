@@ -4,6 +4,7 @@ import { notFoundHandler } from "./middleware/not-found";
 import { globalErrorHandler } from "./middleware/global-error";
 import authRouter from "./modules/auth/auth.routes";
 import adminRouter from "./modules/admin/admin.routes";
+import serviceRouter from "./modules/service/service.routes";
 
 
 const app: Application = express();
@@ -17,7 +18,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter)
-
+app.use("/api/services", serviceRouter);
 
 app.use(notFoundHandler);
 
