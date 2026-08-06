@@ -2,8 +2,10 @@ model Availability {
     id String @id @default(uuid())
     technicianProfileId String
     technicianProfile technicianProfile @relation(fields: [technicianProfileId], references: [id], onDelete: Cascade)
-    dayOfWeek Int
+
+    slot String
     isAvailable Boolean @default(true)
+
     startTime DateTime
     endTime DateTime
     createdAt DateTime @default(now())

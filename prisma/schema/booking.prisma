@@ -7,11 +7,12 @@ model Booking{
     serviceId String
     service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
     status BookingStatus @default(REQUESTED)
-    scheduledAt DateTime
+    bookingDate DateTime
+    timeSlot String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     payments Payment?
-    reviews Review[]
+    review Review?
 
     @@map("bookings")
    

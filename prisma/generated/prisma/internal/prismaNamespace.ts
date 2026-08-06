@@ -1058,7 +1058,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const AvailabilityScalarFieldEnum = {
   id: 'id',
   technicianProfileId: 'technicianProfileId',
-  dayOfWeek: 'dayOfWeek',
+  slot: 'slot',
   isAvailable: 'isAvailable',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -1075,7 +1075,8 @@ export const BookingScalarFieldEnum = {
   technicianProfileId: 'technicianProfileId',
   serviceId: 'serviceId',
   status: 'status',
-  scheduledAt: 'scheduledAt',
+  bookingDate: 'bookingDate',
+  timeSlot: 'timeSlot',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1210,20 +1211,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1297,6 +1284,20 @@ export type EnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'PaymentProvider[]'
  */
 export type ListEnumPaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentProvider[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 

@@ -80,7 +80,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const AvailabilityScalarFieldEnum = {
   id: 'id',
   technicianProfileId: 'technicianProfileId',
-  dayOfWeek: 'dayOfWeek',
+  slot: 'slot',
   isAvailable: 'isAvailable',
   startTime: 'startTime',
   endTime: 'endTime',
@@ -97,7 +97,8 @@ export const BookingScalarFieldEnum = {
   technicianProfileId: 'technicianProfileId',
   serviceId: 'serviceId',
   status: 'status',
-  scheduledAt: 'scheduledAt',
+  bookingDate: 'bookingDate',
+  timeSlot: 'timeSlot',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
