@@ -9,6 +9,7 @@ import categoryRouter from "./modules/category/category.routes";
 import techniciaRouter from "./modules/technician/technician.routes";
 import bookingRouter from "./modules/booking/booking.routes";
 import userRouter from "./modules/user/user.route";
+import reviewRouter from "./modules/review/review.routes";
 
 const app: Application = express();
 
@@ -23,11 +24,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/services", serviceRouter);
+app.use("/api/reviews", reviewRouter);
 app.use("/api/technician", techniciaRouter);
-app.use("/auth/bookings", bookingRouter);
+app.use("/api/bookings", bookingRouter);
 app.use("/api/user", userRouter);
-app.use(notFoundHandler);
 
+
+app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
 export default app;
