@@ -8,7 +8,7 @@ import serviceRouter from "./modules/service/service.routes";
 import categoryRouter from "./modules/category/category.routes";
 import techniciaRouter from "./modules/technician/technician.routes";
 import bookingRouter from "./modules/booking/booking.routes";
-
+import userRouter from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -20,12 +20,12 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/admin", adminRouter)
+app.use("/api/admin", adminRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/services", serviceRouter);
 app.use("/api/technician", techniciaRouter);
-app.use("/auth/bookings", bookingRouter)
-
+app.use("/auth/bookings", bookingRouter);
+app.use("/api/user", userRouter);
 app.use(notFoundHandler);
 
 app.use(globalErrorHandler);
