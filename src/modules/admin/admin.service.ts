@@ -40,4 +40,52 @@ export const updateUserStatusInDB = async (id: string, status: UserStatus) => {
   return result;
 };
 
+export const getAllBookingsFromDB = async () => {
+  return await prisma.booking.findMany({
+    include: {
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      technicianProfile: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+      service: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export const createCategoryInDB = async (payload: {
+  name: string;
+  description?: string;
+}) => {
+  const result = await prisma.category.create({
+    data: {
+      name: payload.name,
+      description: payload.description || "",
+    },
+  });
+  return result;
+};
+
+export const getAllCategoriesFromDB = async () => {
+  return await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+};
 

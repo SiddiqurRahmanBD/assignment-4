@@ -2,7 +2,7 @@ import { catchAsync } from "../../utils/catch-async";
 import type { Request, Response } from "express";
 import { sendResponse } from "../../utils/send-response";
 import httpStatus from "http-status";
-import { getAllUsersFromDB, updateUserStatusInDB } from "./admin.service";
+import { createCategoryInDB, getAllBookingsFromDB, getAllCategoriesFromDB, getAllUsersFromDB, updateUserStatusInDB } from "./admin.service";
 import { AppError } from "../../utils/app-error";
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response) => {
@@ -35,3 +35,38 @@ export const updateUserStatus = catchAsync(
     });
   },
 );
+
+export const getAllBookings = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await getAllBookingsFromDB();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "All bookings retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+export const createCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await createCategoryInDB(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "Category created successfully",
+    data: result,
+  });
+});
+
+export const getAllCategories = catchAsync(async (req: Request, res: Response) => {
+  const result = await getAllCategoriesFromDB();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Categories retrieved successfully",
+    data: result,
+  });
+});
