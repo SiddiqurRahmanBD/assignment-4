@@ -7,6 +7,7 @@ import adminRouter from "./modules/admin/admin.routes";
 import serviceRouter from "./modules/service/service.routes";
 import categoryRouter from "./modules/category/category.routes";
 import techniciaRouter from "./modules/technician/technician.routes";
+import bookingRouter from "./modules/booking/booking.routes";
 
 
 const app: Application = express();
@@ -23,6 +24,7 @@ app.use("/api/admin", adminRouter)
 app.use("/api/categories", categoryRouter);
 app.use("/api/services", serviceRouter);
 app.use("/api/technician", techniciaRouter);
+app.use("/auth/bookings", bookingRouter)
 
 app.use(notFoundHandler);
 
