@@ -46,54 +46,100 @@ export const getAllServicesFromDB = async (filters: IServiceFilter) => {
   const whereConditions =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
-  const services = await prisma.service.findMany({
-    where: whereConditions,
-    include: {
-      category: true,
-      technicianProfile: {
-        include: {
-          user: true,
-          bookings: {
-            include: {
-              reviews: true,
+  // const services = await prisma.service.findMany({
+  //   where: whereConditions,
+  //   include: {
+  //     category: true,
+  //     technicianProfile: {
+  //       include: {
+  //         user: true,
+  //         bookings: {
+  //           include: {
+  //             review: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
+
+  // let result = services.map((service) => {
+  //   const bookingsWithReviews = service.technicianProfile.bookings.filter(
+  //     (b) => b.reviews.length > 0,
+  //   );
+
+  //   const totalRating = bookingsWithReviews.reduce(
+  //     (sum, b) =>
+  //       sum +
+  //       b.reviews.reduce((reviewSum, review) => reviewSum + review.rating, 0),
+  //     0,
+  //   );
+
+  //   const totalReviews = bookingsWithReviews.reduce(
+  //     (count, b) => count + b.reviews.length,
+  //     0,
+  //   );
+
+  //   const avgRating = totalReviews > 0 ? totalRating / totalReviews : 0;
+
+  //   return {
+  //     ...service,
+  //     averageRating: avgRating,
+  //   };
+  // });
+
+  // if (rating) {
+  //   const targetRating = parseFloat(rating);
+  //   result = result.filter((service) => service.averageRating >= targetRating);
+  // }
+
+  // return result;
+    const services = await prisma.service.findMany({
+      where: whereConditions,
+      include: {
+        category: true,
+        technicianProfile: {
+          include: {
+            user: true,
+            bookings: {
+              include: {
+                review: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  let result = services.map((service) => {
-    const bookingsWithReviews = service.technicianProfile.bookings.filter(
-      (b) => b.reviews.length > 0,
-    );
+    let result = services.map((service) => {
+      const bookingsWithReviews = service.technicianProfile.bookings.filter(
+        (b) => b.review !== null,
+      );
 
-    const totalRating = bookingsWithReviews.reduce(
-      (sum, b) =>
-        sum +
-        b.reviews.reduce((reviewSum, review) => reviewSum + review.rating, 0),
-      0,
-    );
+      const totalRating = bookingsWithReviews.reduce(
+        (sum, b) => sum + (b.review?.rating || 0),
+        0,
+      );
 
-    const totalReviews = bookingsWithReviews.reduce(
-      (count, b) => count + b.reviews.length,
-      0,
-    );
+      const avgRating =
+        bookingsWithReviews.length > 0
+          ? totalRating / bookingsWithReviews.length
+          : 0;
 
-    const avgRating = totalReviews > 0 ? totalRating / totalReviews : 0;
+      return {
+        ...service,
+        averageRating: avgRating,
+      };
+    });
 
-    return {
-      ...service,
-      averageRating: avgRating,
-    };
-  });
+    if (rating) {
+      const targetRating = parseFloat(rating);
+      result = result.filter(
+        (service) => service.averageRating >= targetRating,
+      );
+    }
 
-  if (rating) {
-    const targetRating = parseFloat(rating);
-    result = result.filter((service) => service.averageRating >= targetRating);
-  }
-
-  return result;
+    return result;
 };
 
 export const getSingleServiceFromDB = async (id: string) => {
@@ -118,5 +164,28 @@ export const getSingleServiceFromDB = async (id: string) => {
     },
   });
 
+  return result;
+};
+
+export const createServiceToDB = async (payload: {
+  name: string;
+  description?: string;
+  price: number;
+  categoryId: string;
+  technicianProfileId: string;
+}) => {
+  const result = await prisma.service.create({
+    data: {
+      name: payload.name,
+      description: payload.description ?? "",
+      price: Number(payload.price),
+      categoryId: payload.categoryId,
+      technicianProfileId: payload.technicianProfileId,
+    },
+    include: {
+      category: true,
+      technicianProfile: true,
+    },
+  });
   return result;
 };

@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { getAllService, getSingleService } from "./serice.controller";
+import { createService, getAllService, getSingleService } from "./serice.controller";
 
 const serviceRouter = Router();
 serviceRouter.get("/", getAllService);
 serviceRouter.get("/:id", getSingleService);
+serviceRouter.post("/", createService )
 export default serviceRouter;

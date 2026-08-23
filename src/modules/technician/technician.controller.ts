@@ -80,7 +80,7 @@ export const getAllTechnicians = catchAsync(async (req: Request, res: Response) 
 });
 
 export const getSingleTechnician = catchAsync(async (req: Request, res: Response) => {
-  const result = getSingleTechnicianFromDB(
+  const result = await getSingleTechnicianFromDB(
     req.params.id as string,
   );
 

@@ -321,7 +321,7 @@ export type PaymentCreateInput = {
   paidAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  booking: Prisma.BookingCreateNestedOneWithoutPaymentsInput
+  booking: Prisma.BookingCreateNestedOneWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateInput = {
@@ -345,7 +345,7 @@ export type PaymentUpdateInput = {
   paidAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  booking?: Prisma.BookingUpdateOneRequiredWithoutPaymentsNestedInput
+  booking?: Prisma.BookingUpdateOneRequiredWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateInput = {

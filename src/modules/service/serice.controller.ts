@@ -1,6 +1,7 @@
 import { catchAsync } from "../../utils/catch-async";
 import type { Request, Response } from "express";
 import {
+    createServiceToDB,
   getAllServicesFromDB,
   getSingleServiceFromDB,
 } from "./service.service";
@@ -28,6 +29,19 @@ export const getSingleService = catchAsync(
       success: true,
       statusCode: httpStatus.OK,
       message: "Service retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+export const createService = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await createServiceToDB(req.body);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Service created successfully",
       data: result,
     });
   },

@@ -59,14 +59,14 @@ export const updateProfileIntoDB = async (
 
   if (availabilities && availabilities.length > 0) {
     await prisma.availability.deleteMany({
-      where: { technicianProfileId: profile.id, isBooked: false },
+      where: { technicianProfileId: profile.id, isAvailable: true },
     });
 
     await prisma.availability.createMany({
       data: availabilities.map((item: { slot: string }) => ({
         technicianProfileId: profile.id,
         slot: item.slot,
-        isAvailable: false,
+        isAvailable: true,
       })),
     });
   }
@@ -107,7 +107,7 @@ export const updateAvailabilityIntoDB = async (
       slot: item.slot,
       startTime: new Date(item.startTime),
       endTime: new Date(item.endTime),
-      isAvailable: false,
+      isAvailable: true,
     })),
   });
 
@@ -262,7 +262,7 @@ export const getAllTechniciansFromDB = async (filters: ITechnicianFilterRequest)
       user: true,
       services: { include: { category: true } },
       bookings: { include: { review: true } },
-      availabilitySlots: true,
+      availabilities: true,
     },
   });
 
@@ -292,7 +292,7 @@ export const getSingleTechnicianFromDB = async (id: string) => {
     include: {
       user: true,
       services: { include: { category: true } },
-      availabilitySlots: true,
+      availabilities: true,
       bookings: {
         include: {
           review: {

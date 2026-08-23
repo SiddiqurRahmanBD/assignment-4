@@ -12,7 +12,10 @@ export const createBookingIntoDB = async (
   });
 
   if (!customer || customer.role !== Role.CUSTOMER) {
-    throw new Error("Only active customers can create a booking!");
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "Only active customers can create a booking!",
+    );
   }
 
   const technician = await prisma.technicianProfile.findUnique({
@@ -23,7 +26,10 @@ export const createBookingIntoDB = async (
   });
 
   if (!technician) {
-    throw new Error("Requested technician profile not found!");
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Requested technician profile not found!",
+    );
   }
 
   const service = await prisma.service.findUnique({
@@ -31,15 +37,20 @@ export const createBookingIntoDB = async (
   });
 
   if (!service) {
-    throw new Error("Requested service not found!");
+    throw new AppError(httpStatus.NOT_FOUND, "Requested service not found!");
   }
 
   const isSlotAvailable = technician.availabilities.some(
-    (s) => s.slot === payload.timeSlot,
+    (availability) =>
+      availability.slot === payload.timeSlot &&
+      availability.isAvailable === true,
   );
 
   if (!isSlotAvailable) {
-    throw new Error("Selected time slot is not available for this technician!");
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Selected time slot is not available for this technician!",
+    );
   }
 
   return await prisma.booking.create({
@@ -52,7 +63,7 @@ export const createBookingIntoDB = async (
       status: "REQUESTED",
     },
     include: {
-      technicianProfile: true,
+      technician: true,
       service: true,
     },
   });

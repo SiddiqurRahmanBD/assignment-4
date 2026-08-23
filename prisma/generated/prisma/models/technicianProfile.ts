@@ -199,7 +199,7 @@ export type TechnicianProfileGroupByOutputType = {
   skills: string[]
   experience: string
   pricing: number
-  location: string
+  location: string | null
   createdAt: Date
   updatedAt: Date
   _count: TechnicianProfileCountAggregateOutputType | null
@@ -233,7 +233,7 @@ export type technicianProfileWhereInput = {
   skills?: Prisma.StringNullableListFilter<"technicianProfile">
   experience?: Prisma.StringFilter<"technicianProfile"> | string
   pricing?: Prisma.FloatFilter<"technicianProfile"> | number
-  location?: Prisma.StringFilter<"technicianProfile"> | string
+  location?: Prisma.StringNullableFilter<"technicianProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"technicianProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"technicianProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -249,7 +249,7 @@ export type technicianProfileOrderByWithRelationInput = {
   skills?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   pricing?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -268,7 +268,7 @@ export type technicianProfileWhereUniqueInput = Prisma.AtLeast<{
   skills?: Prisma.StringNullableListFilter<"technicianProfile">
   experience?: Prisma.StringFilter<"technicianProfile"> | string
   pricing?: Prisma.FloatFilter<"technicianProfile"> | number
-  location?: Prisma.StringFilter<"technicianProfile"> | string
+  location?: Prisma.StringNullableFilter<"technicianProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"technicianProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"technicianProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -284,7 +284,7 @@ export type technicianProfileOrderByWithAggregationInput = {
   skills?: Prisma.SortOrder
   experience?: Prisma.SortOrder
   pricing?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.technicianProfileCountOrderByAggregateInput
@@ -303,7 +303,7 @@ export type technicianProfileScalarWhereWithAggregatesInput = {
   skills?: Prisma.StringNullableListFilter<"technicianProfile">
   experience?: Prisma.StringWithAggregatesFilter<"technicianProfile"> | string
   pricing?: Prisma.FloatWithAggregatesFilter<"technicianProfile"> | number
-  location?: Prisma.StringWithAggregatesFilter<"technicianProfile"> | string
+  location?: Prisma.StringNullableWithAggregatesFilter<"technicianProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"technicianProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"technicianProfile"> | Date | string
 }
@@ -313,7 +313,7 @@ export type technicianProfileCreateInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTechnicianProfilesInput
@@ -329,7 +329,7 @@ export type technicianProfileUncheckedCreateInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutTechnicianProfileInput
@@ -343,7 +343,7 @@ export type technicianProfileUpdateInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTechnicianProfilesNestedInput
@@ -359,7 +359,7 @@ export type technicianProfileUncheckedUpdateInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutTechnicianProfileNestedInput
@@ -374,7 +374,7 @@ export type technicianProfileCreateManyInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -384,7 +384,7 @@ export type technicianProfileUpdateManyMutationInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -395,7 +395,7 @@ export type technicianProfileUncheckedUpdateManyInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -559,7 +559,7 @@ export type technicianProfileCreateWithoutAvailabilitiesInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTechnicianProfilesInput
@@ -574,7 +574,7 @@ export type technicianProfileUncheckedCreateWithoutAvailabilitiesInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutTechnicianProfileInput
@@ -603,7 +603,7 @@ export type technicianProfileUpdateWithoutAvailabilitiesInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTechnicianProfilesNestedInput
@@ -618,7 +618,7 @@ export type technicianProfileUncheckedUpdateWithoutAvailabilitiesInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutTechnicianProfileNestedInput
@@ -631,7 +631,7 @@ export type technicianProfileCreateWithoutBookingsInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTechnicianProfilesInput
@@ -646,7 +646,7 @@ export type technicianProfileUncheckedCreateWithoutBookingsInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutTechnicianProfileInput
@@ -675,7 +675,7 @@ export type technicianProfileUpdateWithoutBookingsInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTechnicianProfilesNestedInput
@@ -690,7 +690,7 @@ export type technicianProfileUncheckedUpdateWithoutBookingsInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutTechnicianProfileNestedInput
@@ -703,7 +703,7 @@ export type technicianProfileCreateWithoutReviewsInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTechnicianProfilesInput
@@ -718,7 +718,7 @@ export type technicianProfileUncheckedCreateWithoutReviewsInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutTechnicianProfileInput
@@ -747,7 +747,7 @@ export type technicianProfileUpdateWithoutReviewsInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTechnicianProfilesNestedInput
@@ -762,7 +762,7 @@ export type technicianProfileUncheckedUpdateWithoutReviewsInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutTechnicianProfileNestedInput
@@ -775,7 +775,7 @@ export type technicianProfileCreateWithoutServicesInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTechnicianProfilesInput
@@ -790,7 +790,7 @@ export type technicianProfileUncheckedCreateWithoutServicesInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTechnicianInput
@@ -819,7 +819,7 @@ export type technicianProfileUpdateWithoutServicesInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTechnicianProfilesNestedInput
@@ -834,7 +834,7 @@ export type technicianProfileUncheckedUpdateWithoutServicesInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTechnicianNestedInput
@@ -847,7 +847,7 @@ export type technicianProfileCreateWithoutUserInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceCreateNestedManyWithoutTechnicianProfileInput
@@ -861,7 +861,7 @@ export type technicianProfileUncheckedCreateWithoutUserInput = {
   skills?: Prisma.technicianProfileCreateskillsInput | string[]
   experience: string
   pricing: number
-  location: string
+  location?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   services?: Prisma.ServiceUncheckedCreateNestedManyWithoutTechnicianProfileInput
@@ -891,7 +891,7 @@ export type technicianProfileUpdateWithoutUserInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUpdateManyWithoutTechnicianProfileNestedInput
@@ -905,7 +905,7 @@ export type technicianProfileUncheckedUpdateWithoutUserInput = {
   skills?: Prisma.technicianProfileUpdateskillsInput | string[]
   experience?: Prisma.StringFieldUpdateOperationsInput | string
   pricing?: Prisma.FloatFieldUpdateOperationsInput | number
-  location?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.ServiceUncheckedUpdateManyWithoutTechnicianProfileNestedInput
@@ -1055,7 +1055,7 @@ export type $technicianProfilePayload<ExtArgs extends runtime.Types.Extensions.I
     skills: string[]
     experience: string
     pricing: number
-    location: string
+    location: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["technicianProfile"]>

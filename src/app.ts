@@ -1,4 +1,4 @@
-import express, { type Application } from "express";
+import express, { application, type Application } from "express";
 import cookieParser from "cookie-parser";
 import { notFoundHandler } from "./middleware/not-found";
 import { globalErrorHandler } from "./middleware/global-error";
@@ -10,11 +10,14 @@ import techniciaRouter from "./modules/technician/technician.routes";
 import bookingRouter from "./modules/booking/booking.routes";
 import userRouter from "./modules/user/user.route";
 import reviewRouter from "./modules/review/review.routes";
+import paymentRouter from "./modules/payment/payment.route";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.post("/payments/webhook", express.raw({ type: "application/json" }));
 
 app.get("/", (_req, res) => {
   res.send("Server is running");
@@ -28,7 +31,7 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/technician", techniciaRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/user", userRouter);
-
+app.use("/api/payment", paymentRouter);
 
 app.use(notFoundHandler);
 app.use(globalErrorHandler);
