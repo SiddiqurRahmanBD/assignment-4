@@ -68,7 +68,7 @@ export const getAllReviewsFromDB = async () => {
       customer: true,
       booking: {
         include: {
-          technicianProfile: {
+          technician: {
             include: {
               user: true,
             },

@@ -4,7 +4,7 @@ import { BookingStatus, PaymentProvider, PaymentStatus, Role, UserStatus } from 
 
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("Seeding database...");
 
   // Clean database
   await prisma.review.deleteMany();
@@ -55,7 +55,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Users created");
+  console.log("Users created");
 
   // ==========================
   // TECHNICIAN PROFILE
@@ -187,7 +187,7 @@ async function main() {
     },
   });
 
-  console.log("🎉 Database seeded successfully!");
+  console.log("Database seeded successfully!");
 }
 
 main()

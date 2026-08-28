@@ -14,10 +14,11 @@ import paymentRouter from "./modules/payment/payment.route";
 
 const app: Application = express();
 
-app.use(express.json());
-app.use(cookieParser());
+app.use("/api/payment/webhook", express.raw({ type: "application/json" }));
 
-app.post("/payments/webhook", express.raw({ type: "application/json" }));
+app.use(express.json());
+
+app.use(cookieParser());
 
 app.get("/", (_req, res) => {
   res.send("Server is running");

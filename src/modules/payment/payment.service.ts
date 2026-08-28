@@ -4,6 +4,7 @@ import { AppError } from "../../utils/app-error";
 import httpStatus from "http-status";
 import config from "../../config";
 import type { Stripe } from "stripe";
+import { Role } from "../../../prisma/generated/prisma/enums";
 export const createCheckoutSession = async (
   userId: string,
   bookingId: string,
@@ -68,10 +69,222 @@ export const createCheckoutSession = async (
   return transactionResult;
 };
 
+export const handleManualPaymentConfirm = async (bookingId: string) => {
+  if (!bookingId) {
+    throw new Error("Booking ID is required to confirm payment");
+  }
+
+  const booking = await prisma.booking.findUniqueOrThrow({
+    where: { id: bookingId },
+    include: { service: true },
+  });
+
+  return await prisma.$transaction(async (tx) => {
+    const existingPayment = await tx.payment.findUnique({
+      where: { bookingId },
+    });
+
+    if (existingPayment) {
+      return existingPayment;
+    }
+
+    const stripeTransactionId = `pi_${Math.random().toString(36).substring(2, 12)}${Date.now().toString(36)}`;
+
+    const payment = await tx.payment.create({
+      data: {
+        bookingId,
+        amount: booking.service.price,
+        provider: "STRIPE",
+        status: "COMPLETED",
+        transactionId: stripeTransactionId,
+        paidAt: new Date(),
+      },
+    });
+
+    await tx.booking.update({
+      where: { id: bookingId },
+      data: { status: "PAID" },
+    });
+
+    return payment;
+  });
+};
+
+// export const handleWebhook = async (payload: Buffer, signature: string) => {
+//   const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
+//   let event: Stripe.Event;
+
+//   try {
+//     event = stripe.webhooks.constructEvent(
+//       payload,
+//       signature,
+//       endpointSecret as string,
+//     );
+//   } catch (err: any) {
+//     throw new Error(`Webhook Error: ${err.message}`);
+//   }
+
+//   if (event.type === "checkout.session.completed") {
+//     const session = event.data.object as Stripe.Checkout.Session;
+//     const bookingId = session.metadata?.bookingId;
+
+//     if (session.payment_status !== "paid") {
+//       throw new Error("Payment process incomplete.");
+//     }
+//     if (!bookingId) {
+//       throw new Error("Required metadata missing from Stripe session.");
+//     }
+
+//     await prisma.$transaction(async (tx) => {
+//       const existingPayment = await tx.payment.findFirst({
+//         where: {
+//           bookingId,
+//         },
+//       });
+
+//       if (existingPayment) {
+//         return;
+//       }
+
+//       const validTransactionId =
+//         (session.payment_intent as string) ||
+//         session.id ||
+//         `pi_${Math.random().toString(36).substring(2, 12)}${Date.now().toString(36)}`;
+
+//       await tx.payment.create({
+//         data: {
+//           bookingId,
+//           amount: (session.amount_total ?? 0) / 100,
+//           provider: "STRIPE",
+//           status: "COMPLETED",
+//           transactionId: validTransactionId,
+//           method: "CARD",
+//           paidAt: new Date(),
+//         },
+//       });
+
+//       await tx.booking.update({
+//         where: {
+//           id: bookingId,
+//         },
+//         data: {
+//           status: "PAID",
+//         },
+//       });
+//     });
+//   }
+// };
+
+// export const handleWebhook = async (payload: Buffer, signature: string) => {
+//   const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
+
+//   let event: Stripe.Event;
+
+//   try {
+//     event = stripe.webhooks.constructEvent(
+//       payload,
+//       signature,
+//       endpointSecret as string,
+//     );
+//   } catch (err: any) {
+//     console.error("❌ WEBHOOK SIGNATURE ERROR:", err.message);
+
+//     throw new AppError(
+//       httpStatus.BAD_REQUEST,
+//       `Webhook signature verification failed: ${err.message}`,
+//     );
+//   }
+
+//   console.log("✅ Stripe event received:", event.type);
+
+//   if (event.type !== "checkout.session.completed") {
+//     console.log("ℹ️ Ignoring event:", event.type);
+//     return;
+//   }
+
+//   const session = event.data.object as Stripe.Checkout.Session;
+
+//   console.log("📦 Checkout session:", {
+//     id: session.id,
+//     payment_status: session.payment_status,
+//     payment_intent: session.payment_intent,
+//     amount_total: session.amount_total,
+//     metadata: session.metadata,
+//   });
+
+//   const bookingId = session.metadata?.bookingId;
+
+//   if (session.payment_status !== "paid") {
+//     console.error("❌ Payment status is not paid:", session.payment_status);
+
+//     throw new AppError(httpStatus.BAD_REQUEST, "Payment process incomplete.");
+//   }
+
+//   if (!bookingId) {
+//     console.error("❌ Booking ID missing from metadata");
+
+//     throw new AppError(
+//       httpStatus.BAD_REQUEST,
+//       "Required metadata missing from Stripe session.",
+//     );
+//   }
+
+//   console.log("✅ Booking ID:", bookingId);
+
+//   await prisma.$transaction(async (tx) => {
+//     const existingPayment = await tx.payment.findFirst({
+//       where: {
+//         bookingId,
+//       },
+//     });
+
+//     if (existingPayment) {
+//       console.log("ℹ️ Payment already exists:", existingPayment.id);
+//       return;
+//     }
+
+//     const validTransactionId =
+//       typeof session.payment_intent === "string"
+//         ? session.payment_intent
+//         : session.id;
+
+//     console.log("💳 Creating payment...");
+
+//     await tx.payment.create({
+//       data: {
+//         bookingId,
+//         amount: (session.amount_total ?? 0) / 100,
+//         provider: "STRIPE",
+//         status: "COMPLETED",
+//         transactionId: validTransactionId,
+//         method: "CARD",
+//         paidAt: new Date(),
+//       },
+//     });
+
+//     console.log("✅ Payment created");
+
+//     await tx.booking.update({
+//       where: {
+//         id: bookingId,
+//       },
+//       data: {
+//         status: "PAID",
+//       },
+//     });
+
+//     console.log("✅ Booking updated to PAID");
+//   });
+
+//   console.log("🎉 Webhook processing completed");
+// };
+
 export const handleWebhook = async (payload: Buffer, signature: string) => {
   const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
+
   let event: Stripe.Event;
 
+  // 1. Verify Stripe webhook signature
   try {
     event = stripe.webhooks.constructEvent(
       payload,
@@ -79,58 +292,159 @@ export const handleWebhook = async (payload: Buffer, signature: string) => {
       endpointSecret as string,
     );
   } catch (err: any) {
-    throw new Error(`Webhook Error: ${err.message}`);
+    console.error("❌ WEBHOOK SIGNATURE ERROR:", err.message);
+
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `Webhook signature verification failed: ${err.message}`,
+    );
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    const bookingId = session.metadata?.bookingId;
+  console.log("✅ Stripe event received:", event.type);
 
-    if (session.payment_status !== "paid") {
-      throw new Error("Payment process incomplete.");
-    }
-    if (!bookingId) {
-      throw new Error("Required metadata missing from Stripe session.");
-    }
+  // 2. Ignore events we don't need
+  if (event.type !== "checkout.session.completed") {
+    console.log("ℹ️ Ignoring event:", event.type);
+    return;
+  }
 
-    await prisma.$transaction(async (tx) => {
-      const existingPayment = await tx.payment.findFirst({
-        where: {
-          bookingId,
-        },
-      });
+  // 3. Get Checkout Session
+  const session = event.data.object as Stripe.Checkout.Session;
 
-      if (existingPayment) {
-        return;
-      }
+  console.log("📦 Checkout session:", {
+    id: session.id,
+    payment_status: session.payment_status,
+    payment_intent: session.payment_intent,
+    amount_total: session.amount_total,
+    metadata: session.metadata,
+  });
 
-      const validTransactionId =
-        (session.payment_intent as string) ||
-        session.id ||
-        `pi_${Math.random().toString(36).substring(2, 12)}${Date.now().toString(36)}`;
+  // 4. Get booking ID from Stripe metadata
+  const bookingId = session.metadata?.bookingId;
 
-      await tx.payment.create({
-        data: {
-          bookingId,
-          amount: (session.amount_total ?? 0) / 100,
-          provider: "STRIPE",
-          status: "COMPLETED",
-          transactionId: validTransactionId,
-          method: "CARD",
-          paidAt: new Date(),
-        },
-      });
+  if (!bookingId) {
+    console.error("❌ Booking ID missing from metadata");
 
-      await tx.booking.update({
-        where: {
-          id: bookingId,
-        },
-        data: {
-          status: "PAID",
-        },
-      });
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Required metadata missing from Stripe session.",
+    );
+  }
+
+  console.log("✅ Booking ID:", bookingId);
+
+  // 5. Make sure payment was successful
+  if (session.payment_status !== "paid") {
+    console.error("❌ Payment status is not paid:", session.payment_status);
+
+    throw new AppError(httpStatus.BAD_REQUEST, "Payment process incomplete.");
+  }
+
+  // 6. Create payment + update booking atomically
+  await prisma.$transaction(async (tx) => {
+    // Check if payment already exists
+    const existingPayment = await tx.payment.findUnique({
+      where: {
+        bookingId,
+      },
     });
+
+    if (existingPayment) {
+      console.log("ℹ️ Payment already exists:", existingPayment.id);
+
+      return;
+    }
+
+    // Stripe PaymentIntent ID is the best transaction ID
+    const transactionId =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.id;
+
+    console.log("💳 Creating payment...", {
+      bookingId,
+      amount: (session.amount_total ?? 0) / 100,
+      transactionId,
+    });
+
+    // 7. Create payment
+    const payment = await tx.payment.create({
+      data: {
+        bookingId,
+        amount: (session.amount_total ?? 0) / 100,
+        provider: "STRIPE",
+        status: "COMPLETED",
+        transactionId,
+        paidAt: new Date(),
+      },
+    });
+
+    console.log("✅ Payment created:", payment.id);
+
+    // 8. Update booking status
+    await tx.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        status: "PAID",
+      },
+    });
+
+    console.log("✅ Booking updated to PAID");
+  });
+
+  console.log("🎉 Webhook processing completed");
+};
+export const getAllPaymentsFromDB = async (userId: string, role: string) => {
+  let queryFilter = {};
+
+  if (role === Role.CUSTOMER) {
+    queryFilter = {
+      booking: {
+        customerId: userId,
+      },
+    };
   }
+
+  const result = await prisma.payment.findMany({
+    where: queryFilter,
+    include: {
+      booking: {
+        include: {
+          service: true,
+        },
+      },
+    },
+    orderBy: {
+      paidAt: "desc",
+    },
+  });
+
+  return result;
 };
 
+export const getSinglePaymentFromDB = async (
+  paymentId: string,
+  userId: string,
+  role: string,
+) => {
+  const payment = await prisma.payment.findUniqueOrThrow({
+    where: {
+      id: paymentId,
+    },
+    include: {
+      booking: {
+        include: {
+          service: true,
+        },
+      },
+    },
+  });
 
+  if (role === Role.CUSTOMER && payment.booking.customerId !== userId) {
+    throw new Error("Unauthorized access to this payment details!");
+  }
+
+  return payment;
+};

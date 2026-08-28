@@ -5,6 +5,6 @@ import { createReview, deleteReview, getAllReviews } from "./review.controller";
 
 const reviewRouter = Router();
 reviewRouter.post("/", auth(Role.CUSTOMER), createReview);
-reviewRouter.get("", getAllReviews);
+reviewRouter.get("/", getAllReviews);
 reviewRouter.delete("/:id", auth(Role.CUSTOMER, Role.ADMIN), deleteReview);
 export default reviewRouter;

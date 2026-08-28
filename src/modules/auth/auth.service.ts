@@ -6,18 +6,6 @@ import type { LoginUserPayload, RegisterUserPayload } from "./auth.interface";
 import httpStatus from "http-status";
 import { Role } from "../../../prisma/generated/prisma/enums";
 
-// function toJwtPayload(user: {
-//   id: string;
-//   email: string;
-//   role: userJwtPayload["role"];
-// }): userJwtPayload {
-//   return {
-//     id: user.id,
-//     email: user.email,
-//     role: user.role,
-//   };
-// }
-
 export async function registerUser(payload: RegisterUserPayload) {
   const existingUser = await prisma.user.findUnique({
     where: { email: payload.email },
@@ -29,17 +17,7 @@ export async function registerUser(payload: RegisterUserPayload) {
 
   const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-  // const user = await prisma.user.create({
-  //   data: {
-  //     name: payload.name,
-  //     email: payload.email,
-  //     password: hashedPassword,
-  //     role: payload.role,
-  //   },
-  //   omit: {
-  //     password: true,
-  //   },
-  // });
+
   const user = await prisma.user.create({
     data: {
       name: payload.name,
@@ -77,7 +55,15 @@ export async function loginUser(payload: LoginUserPayload) {
   });
 
   if (!user) {
-    throw new AppError(401, "Invalid Email and Password");
+    throw new AppError(httpStatus.UNAUTHORIZED, "Invalid Email and Password");
+  }
+  const isPasswordMatched = await bcrypt.compare(
+    payload.password,
+    user.password,
+  );
+
+  if (!isPasswordMatched) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Invalid Email and Password");
   }
   const safeUser = {
     id: user.id,

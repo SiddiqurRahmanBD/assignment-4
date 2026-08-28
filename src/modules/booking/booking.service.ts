@@ -72,7 +72,7 @@ export const createBookingIntoDB = async (
 export const getMyBookingsFromDB = async (customerId: string) => {
   return await prisma.booking.findMany({
     where: { customerId },
-    include: { service: true, technicianProfile: { include: { user: true } } },
+    include: { service: true, technician: { include: { user: true } } },
   });
 };
 

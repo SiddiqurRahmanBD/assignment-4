@@ -50,7 +50,7 @@ export const getAllBookingsFromDB = async () => {
           email: true,
         },
       },
-      technicianProfile: {
+      technician: {
         include: {
           user: {
             select: {
