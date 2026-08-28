@@ -14,8 +14,8 @@ export const updateMyProfileInDB = async (
       email: true,
       role: true,
       status: true,
-      phoneNumber: true,
-      address: true,
+      // phoneNumber: true,
+      // address: true,
       createdAt: true,
     },
   });
