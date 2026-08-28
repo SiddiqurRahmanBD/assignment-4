@@ -21,9 +21,8 @@ async function main() {
   const technicianPassword = await bcrypt.hash("technician123", 10);
   const customerPassword = await bcrypt.hash("customer123", 10);
 
-  // ==========================
+  
   // USERS
-  // ==========================
 
   const admin = await prisma.user.create({
     data: {
@@ -57,10 +56,9 @@ async function main() {
 
   console.log("Users created");
 
-  // ==========================
+  
   // TECHNICIAN PROFILE
-  // ==========================
-
+  
   const technicianProfile = await prisma.technicianProfile.create({
     data: {
       userId: technician.id,
@@ -71,9 +69,9 @@ async function main() {
     },
   });
 
-  // ==========================
+  
   // CATEGORIES
-  // ==========================
+  
 
   const [plumbing, electrical, cleaning, painting] = await Promise.all([
     prisma.category.create({
@@ -105,9 +103,8 @@ async function main() {
     }),
   ]);
 
-  // ==========================
+  
   // SERVICES
-  // ==========================
 
   const [drainCleaning, pipeRepair] = await Promise.all([
     prisma.service.create({
@@ -131,10 +128,9 @@ async function main() {
     }),
   ]);
 
-  // ==========================
+  
   // AVAILABILITY
-  // ==========================
-
+  
   await prisma.availability.create({
     data: {
       technicianProfileId: technicianProfile.id,
@@ -144,10 +140,9 @@ async function main() {
     },
   });
 
-  // ==========================
+  
   // BOOKING
-  // ==========================
-
+  
   const booking = await prisma.booking.create({
     data: {
       customerId: customer.id,
@@ -159,10 +154,9 @@ async function main() {
     },
   });
 
-  // ==========================
-  // PAYMENT
-  // ==========================
 
+  // PAYMENT
+  
   await prisma.payment.create({
     data: {
       bookingId: booking.id,
@@ -173,10 +167,9 @@ async function main() {
     },
   });
 
-  // ==========================
+  
   // REVIEW
-  // ==========================
-
+  
   await prisma.review.create({
     data: {
       bookingId: booking.id,
